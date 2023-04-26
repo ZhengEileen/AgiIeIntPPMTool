@@ -19,6 +19,8 @@ target/
 *.iml
 *.ipr
 
+.mvn/wrapper/maven-wrapper.jar
+
 ### NetBeans ###
 /nbproject/private/
 /nbbuild/
