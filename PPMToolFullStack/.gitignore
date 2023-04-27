@@ -19,7 +19,7 @@ target/
 *.iml
 *.ipr
 
-.mvn/wrapper/maven-wrapper.jar
+.mvn
 
 ### NetBeans ###
 /nbproject/private/
