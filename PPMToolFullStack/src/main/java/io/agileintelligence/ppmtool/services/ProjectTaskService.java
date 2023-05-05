@@ -10,6 +10,8 @@ import io.agileintelligence.ppmtool.repositories.ProjectTaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ProjectTaskService {
 
@@ -45,7 +47,7 @@ public class ProjectTaskService {
             //INITIAL priority when priority null
 
             //INITIAL status when status is null
-            if(projectTask.getStatus()==null || "".equals(projectTask.getStatus())){
+            if(projectTask.getStatus()==""|| projectTask.getStatus()==null){
                 projectTask.setStatus("TO_DO");
             }
 
@@ -91,15 +93,29 @@ public class ProjectTaskService {
         if(!projectTask.getProjectIdentifier().equals(backlog_id)){
             throw new ProjectNotFoundException("Project Task '"+pt_id+"' does not exist in project: '"+backlog_id);
         }
+
+
         return projectTask;
     }
 
     public ProjectTask updateByProjectSequence(ProjectTask updatedTask, String backlog_id, String pt_id){
-        ProjectTask projectTask = projectTaskRepository.findByProjectSequence(pt_id);
+        ProjectTask projectTask = findPTByProjectSequence(backlog_id, pt_id);
 
         projectTask = updatedTask;
 
         return projectTaskRepository.save(projectTask);
+    }
+
+
+    public void deletePTByProjectSequence(String backlog_id, String pt_id){
+        ProjectTask projectTask = findPTByProjectSequence(backlog_id, pt_id);
+
+        Backlog backlog = projectTask.getBacklog();
+        List<ProjectTask> pts = backlog.getProjectTasks();
+        pts.remove(projectTask);
+        backlogRepository.save(backlog);
+
+        projectTaskRepository.delete(projectTask);
     }
     //Update project task
 
